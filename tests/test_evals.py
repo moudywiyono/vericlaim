@@ -174,25 +174,14 @@ def test_metric_stubs_raise_not_implemented() -> None:
     from evals.metrics.calibration import expected_calibration_error, reliability_diagram
     from evals.metrics.damage_metrics import (
         grounding_fidelity,
-        macro_f1_severity,
-        mape_by_damage_type,
         mean_ap,
     )
-    from evals.metrics.rag_metrics import (
-        endorsement_attachment_rate,
-        faithfulness_score,
-        mean_reciprocal_rank,
-        recall_at_k,
-    )
 
-    # macro_f1_severity and mape_by_damage_type are implemented in Phase 2
+    # damage_metrics: mean_ap and grounding_fidelity still stub; calibration stubs
+    # rag_metrics: implemented in Phase 3 — no longer stubs
     stubs = [
         lambda: mean_ap([], []),
         lambda: grounding_fidelity([], []),
-        lambda: recall_at_k([], [], k=5),
-        lambda: mean_reciprocal_rank([], []),
-        lambda: faithfulness_score([], []),
-        lambda: endorsement_attachment_rate([], {}),
         lambda: expected_calibration_error([], []),
         lambda: reliability_diagram([], []),
     ]

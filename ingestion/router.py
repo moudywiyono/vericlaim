@@ -13,6 +13,9 @@ from typing import Any
 
 from ingestion.models import ClaimPacket, ClaimType, RoutingDecision
 
+if _api_base := os.getenv("API_BASE_URL"):
+    os.environ["OPENAI_API_BASE"] = _api_base
+
 logger = logging.getLogger(__name__)
 
 _CANDIDATE_LABELS = [

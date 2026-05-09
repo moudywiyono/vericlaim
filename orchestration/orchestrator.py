@@ -9,8 +9,14 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import time
 from pathlib import Path
+
+# Bridge API_BASE_URL → OPENAI_API_BASE so LiteLLM picks it up automatically.
+# This runs once when the orchestrator is imported, before any LLM call is made.
+if _api_base := os.getenv("API_BASE_URL"):
+    os.environ["OPENAI_API_BASE"] = _api_base
 
 from ingestion.intake import load_claim_from_manifest, validate_claim_packet
 from ingestion.models import ClaimPacket
@@ -95,7 +101,7 @@ async def _run_node(
             cost_usd=0.0,
             failure_type=FailureType.TRANSIENT.value,
         )
-        return store.mark_agent(node.name, AgentStatus.TIMEOUT)
+        return EvidenceStore(claim_id=store.claim_id).mark_agent(node.name, AgentStatus.TIMEOUT)
 
     except Exception as e:
         elapsed_ms = int((time.monotonic() - start) * 1000)
@@ -117,7 +123,7 @@ async def _run_node(
             await asyncio.sleep(backoff)
             return await _run_node(node, store, packet, degraded_context, attempt + 1)
 
-        return store.mark_agent(node.name, AgentStatus.FAILED)
+        return EvidenceStore(claim_id=store.claim_id).mark_agent(node.name, AgentStatus.FAILED)
 
 
 async def run_claim(manifest_dir: Path | str) -> EvidenceStore:
@@ -202,9 +208,11 @@ async def run_claim(manifest_dir: Path | str) -> EvidenceStore:
             })
 
     # --- Completion ---
+    adjudicator_status = store.specialist_status.get("adjudicator")
     final_state = (
         ClaimState.HUMAN_REVIEW
-        if any(
+        if adjudicator_status in (AgentStatus.FAILED, AgentStatus.TIMEOUT, AgentStatus.PARTIAL)
+        or any(
             s in (AgentStatus.FAILED, AgentStatus.TIMEOUT)
             for s in store.specialist_status.values()
         )

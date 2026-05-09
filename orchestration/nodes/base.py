@@ -57,8 +57,23 @@ class Node(ABC):
         Nodes that make LLM calls should prepend relevant entries to their prompts.
         """
 
+    def _delta(
+        self,
+        store: EvidenceStore,
+        status: AgentStatus,
+        **findings: object,
+    ) -> EvidenceStore:
+        """Return a fresh delta store containing only this node's output.
+
+        All finding lists default to [] so the orchestrator merge adds only
+        what this node actually produced, never inheriting the input store.
+        """
+        base = EvidenceStore(claim_id=store.claim_id)
+        marked = base.mark_agent(self.name, status)
+        return marked.model_copy(update=findings) if findings else marked
+
     def _skipped_result(self, store: EvidenceStore) -> NodeResult:
         return NodeResult(
-            store=store.mark_agent(self.name, AgentStatus.SKIPPED),
+            store=self._delta(store, AgentStatus.SKIPPED),
             status=AgentStatus.SKIPPED,
         )
