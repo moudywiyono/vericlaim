@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Literal
 
 import litellm
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from ingestion.models import ClaimPacket
 from orchestration.nodes.base import Node, NodeResult
@@ -73,6 +73,11 @@ class _StatementFindingRaw(BaseModel):
     timestamp_in_audio: float = 0.0
     speaker_confidence: float = Field(ge=0.0, le=1.0, default=0.8)
     cross_refs: list[_CrossRefRaw] = Field(default_factory=list)
+
+    @field_validator("cross_refs", mode="before")
+    @classmethod
+    def drop_non_dict_refs(cls, v: list) -> list:
+        return [item for item in v if isinstance(item, dict)]
 
 
 class _StatementAnalysisResponse(BaseModel):

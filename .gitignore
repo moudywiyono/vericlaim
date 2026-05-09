@@ -224,3 +224,9 @@ vericlaim.db
 
 # Claude Code operational context
 CLAUDE.md
+
+# Sample data
+vehicle-insurance-claim.mp4
+
+# macOS
+.DS_Store
