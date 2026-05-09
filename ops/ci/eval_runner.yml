@@ -25,12 +25,70 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           VERICLAIM_DEFAULT_MODEL: claude-haiku-4-5-20251001
-          # Gold set gate deliberately NOT set — component evals use synthetic data only
         run: |
           python -m pytest evals/ -v \
             --tb=short \
             -k "not e2e and not adversarial" \
             --junitxml=eval-results/component.xml
+
+      # On push to main: save this run as the new baseline
+      - name: Save baseline result
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          VERICLAIM_DEFAULT_MODEL: claude-haiku-4-5-20251001
+        run: |
+          python - <<'EOF'
+          import json, sys
+          from pathlib import Path
+          from evals.runners.component_suite import ComponentSuite
+          results_dir = Path("eval-results/baselines")
+          results_dir.mkdir(parents=True, exist_ok=True)
+          # Run scored agents and save baselines
+          for agent in ("damage_assessor", "document_extractor"):
+              dataset = Path(f"evals/datasets/component/{agent}")
+              if not dataset.exists():
+                  continue
+              suite = ComponentSuite(agent, dataset)
+              result = suite.run()
+              result.save(results_dir / f"{agent}.json")
+              print(f"Saved baseline for {agent}: {result.metrics}")
+          EOF
+
+      # On PR: run candidate, load baseline, post delta comment
+      - name: Run candidate evals for delta
+        if: github.event_name == 'pull_request'
+        id: run_candidate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          VERICLAIM_DEFAULT_MODEL: claude-haiku-4-5-20251001
+        run: |
+          python - <<'EOF'
+          import json, sys
+          from pathlib import Path
+          from evals.runners.component_suite import ComponentSuite
+          from evals.dashboards.experiments import experiments_delta
+          candidate_dir = Path("eval-results/candidates")
+          candidate_dir.mkdir(parents=True, exist_ok=True)
+          all_reports = []
+          for agent in ("damage_assessor", "document_extractor"):
+              dataset = Path(f"evals/datasets/component/{agent}")
+              if not dataset.exists():
+                  continue
+              suite = ComponentSuite(agent, dataset)
+              result = suite.run()
+              result.save(candidate_dir / f"{agent}.json")
+              baseline_path = Path(f"eval-results/baselines/{agent}.json")
+              if baseline_path.exists():
+                  from evals.runners.base import SuiteResult
+                  baseline = SuiteResult.load(baseline_path)
+                  report = experiments_delta(baseline.to_dict(), result.to_dict())
+                  all_reports.append(report.to_dict())
+                  print(report.to_markdown())
+              else:
+                  print(f"No baseline for {agent} — skipping delta")
+          Path("eval-results/delta_reports.json").write_text(json.dumps(all_reports, indent=2))
+          EOF
 
       - name: Post eval delta comment
         if: github.event_name == 'pull_request'
@@ -38,13 +96,29 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            // TODO: parse eval-results/component.xml and post metric delta vs main
-            // placeholder until SuiteResult.delta() is implemented
-            github.rest.issues.createComment({
+            const reportsPath = 'eval-results/delta_reports.json';
+            if (!fs.existsSync(reportsPath)) {
+              console.log('No delta reports found — skipping comment');
+              return;
+            }
+            const reports = JSON.parse(fs.readFileSync(reportsPath, 'utf8'));
+            if (reports.length === 0) {
+              return;
+            }
+            const sections = reports.map(r => {
+              const emoji = r.regression_count === 0 ? '✅' : '⚠️';
+              const rows = r.metric_deltas.map(d => {
+                const sign = d.delta >= 0 ? '+' : '';
+                return `| ${d.metric} | ${d.baseline.toFixed(4)} | ${d.candidate.toFixed(4)} | ${sign}${d.delta.toFixed(4)} |`;
+              }).join('\n');
+              return `## ${emoji} Eval Delta — \`${r.suite_name}\`\n\n| Metric | Baseline | Candidate | Delta |\n|---|---|---|---|\n${rows}\n\n**Cost delta:** ${r.cost_delta_usd >= 0 ? '+' : ''}${r.cost_delta_usd.toFixed(6)} USD  **Regressions:** ${r.regression_count} | **Improvements:** ${r.improvement_count}`;
+            });
+            const body = sections.join('\n\n---\n\n');
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '## Eval Results\n\nComponent eval run complete. Delta reporting pending SuiteResult implementation.'
+              body
             });
 
       - name: Upload eval artifacts
