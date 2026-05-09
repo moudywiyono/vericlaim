@@ -61,8 +61,8 @@ Most "multi-modal AI" projects pass an image to a frontier model and call it don
 | Phase | Scope | Status |
 |---|---|---|
 | 1 — Foundation | Orchestration scaffold, EvidenceStore schema, ingestion & routing, eval harness skeleton | ✅ Complete |
-| 2 — Damage Assessor + Document Extractor | First vertical slice end-to-end with component evals | 🔜 Next |
-| 3 — Policy Reasoner (RAG) + Statement Analyst + Fraud Aggregator | Full agent graph wired into Adjudicator | Planned |
+| 2 — Damage Assessor + Document Extractor | First vertical slice end-to-end with component evals | ✅ Complete |
+| 3 — Policy Reasoner (RAG) + Statement Analyst + Fraud Aggregator | Full agent graph wired into Adjudicator | 🔜 Next |
 | 4 — E2E eval, adversarial testing, LLMOps dashboards | Full evaluation suite, cost optimisation | Planned |
 | 5 — Demo UI + writeup | Streamlit or Next.js, recorded walkthrough | Planned |
 

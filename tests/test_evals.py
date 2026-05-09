@@ -185,10 +185,9 @@ def test_metric_stubs_raise_not_implemented() -> None:
         recall_at_k,
     )
 
+    # macro_f1_severity and mape_by_damage_type are implemented in Phase 2
     stubs = [
         lambda: mean_ap([], []),
-        lambda: macro_f1_severity([], []),
-        lambda: mape_by_damage_type({}, {}),
         lambda: grounding_fidelity([], []),
         lambda: recall_at_k([], [], k=5),
         lambda: mean_reciprocal_rank([], []),
