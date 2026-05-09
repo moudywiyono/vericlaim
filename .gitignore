@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# VeriClaim runtime artifacts
+traces/
+vericlaim.db
+*.db
+
+# Claude Code operational context
+CLAUDE.md
