@@ -27,6 +27,7 @@ from pydantic import BaseModel, Field, ValidationError
 from ingestion.models import ClaimPacket
 from orchestration.nodes.base import Node, NodeResult
 from orchestration.state import AgentStatus, EvidenceStore
+from orchestration.llmops.prompt_registry import register
 from rag.generation.adjudicator_prompt import SYSTEM_PROMPT, build_adjudication_prompt
 from rag.generation.refusal_logic import evaluate_refusal
 
@@ -34,6 +35,8 @@ logger = logging.getLogger(__name__)
 
 _MODEL = os.getenv("VERICLAIM_DEFAULT_MODEL", "claude-sonnet-4-6")
 _MAX_PARSE_RETRIES = 2
+
+_PROMPT_HASH = register("adjudicator_system", "v1", SYSTEM_PROMPT).hash
 
 
 class _DeterminationItem(BaseModel):
@@ -94,6 +97,8 @@ class AdjudicatorNode(Node):
                 metadata={
                     "refusal_reason": refusal.reason,
                     "escalate_to_human": refusal.escalate_to_human,
+                    "prompt_hash": _PROMPT_HASH,
+                    "model_used": _MODEL,
                 },
             )
 
@@ -169,5 +174,7 @@ class AdjudicatorNode(Node):
                 "human_review_reason": adjudicated.human_review_reason,
                 "determinations": [d.model_dump() for d in adjudicated.determinations],
                 "unknown_citations": sorted(unknown),
+                "prompt_hash": _PROMPT_HASH,
+                "model_used": _MODEL,
             },
         )
