@@ -79,6 +79,7 @@ async def _run_node(
             timeout=node.timeout_s,
         )
         elapsed_ms = int((time.monotonic() - start) * 1000)
+        node_meta = result.metadata or {}
         _trace_store.record_node(
             claim_id=store.claim_id,
             node_name=node.name,
@@ -86,6 +87,11 @@ async def _run_node(
             status=result.status.value,
             elapsed_ms=elapsed_ms,
             cost_usd=result.cost_usd,
+            model_used=node_meta.get("model_used"),
+            prompt_hash=node_meta.get("prompt_hash"),
+            claim_type=packet.claim_type.value if packet.claim_type else None,
+            severity_bucket=node_meta.get("severity_bucket"),
+            metadata=node_meta if node_meta else None,
         )
         return result.store
 
@@ -100,6 +106,7 @@ async def _run_node(
             elapsed_ms=elapsed_ms,
             cost_usd=0.0,
             failure_type=FailureType.TRANSIENT.value,
+            claim_type=packet.claim_type.value if packet.claim_type else None,
         )
         return EvidenceStore(claim_id=store.claim_id).mark_agent(node.name, AgentStatus.TIMEOUT)
 
@@ -116,6 +123,7 @@ async def _run_node(
             cost_usd=0.0,
             failure_type=failure_type.value,
             error=str(e),
+            claim_type=packet.claim_type.value if packet.claim_type else None,
         )
         if RetryConfig.is_retryable(failure_type) and attempt < RetryConfig.max_attempts(failure_type):
             backoff = RetryConfig.backoff_s(attempt)
