@@ -1,0 +1,355 @@
+VERICLAIM MUTUAL INSURANCE COMPANY
+AUTOMOBILE INSURANCE POLICY
+Form VC-AUTO-2024
+
+================================================================================
+DEFINITIONS
+================================================================================
+
+CLAUSE_ID: DEFINITIONS
+
+Throughout this policy, the following words have the meanings set forth below.
+
+"You" and "your" refer to the Named Insured shown in the Declarations and the
+Named Insured's spouse, if a resident of the same household.
+
+"We", "us" and "our" refer to VeriClaim Mutual Insurance Company.
+
+"Bodily injury" means bodily harm, sickness or disease, including death that
+results from such bodily harm, sickness or disease.
+
+"Collision" means the upset of your covered auto or a non-owned auto or their
+impact with another vehicle or object.
+
+"Covered auto" means any vehicle shown in the Declarations for which a premium
+charge is indicated, including a newly acquired auto, a trailer you own, and a
+temporary substitute auto.
+
+"Deductible" means the amount you must pay before we cover a loss. Your
+deductible is shown in the Declarations.
+
+"Loss" means direct and accidental loss or damage to a covered auto or
+non-owned auto, including their equipment.
+
+"Market value" means the amount a willing buyer would pay a willing seller for
+the covered auto in an arm's length transaction at the time of the loss.
+
+"Non-owned auto" means any private passenger auto, pickup, van or trailer not
+owned by or furnished or made available for regular use of you or any family
+member.
+
+"Occupying" means in, upon, getting in, on, out or off.
+
+"Property damage" means physical injury to, destruction of, or loss of use of
+tangible property.
+
+"Total loss" means damage to the covered auto where repair costs plus salvage
+value equal or exceed the actual cash value of the covered auto. We determine
+a total loss when estimated repair costs exceed 75% of the pre-loss market
+value of the vehicle.
+
+"Uninsured motor vehicle" means a land motor vehicle for which no liability
+bond or policy applies at the time of the accident.
+
+================================================================================
+PART A — LIABILITY COVERAGE
+================================================================================
+
+CLAUSE_ID: PART_A.1
+SECTION: PART A — LIABILITY COVERAGE
+SUBSECTION: 1. Insuring Agreement
+
+We will pay damages for bodily injury or property damage for which any covered
+person becomes legally responsible because of an auto accident. We will settle
+or defend, at our option, any claim or suit asking for these damages. Our duty
+to settle or defend ends when our limit of liability for this coverage has been
+exhausted by payment of settlements or judgments.
+
+CLAUSE_ID: PART_A.2
+SECTION: PART A — LIABILITY COVERAGE
+SUBSECTION: 2. Exclusions — Liability Coverage
+
+We do not provide Liability Coverage for any person:
+
+a) Who intentionally causes bodily injury or property damage.
+
+b) For property damage to property owned or being transported by that person.
+
+c) For bodily injury to an employee of that person during the course of
+employment (covered under Workers' Compensation).
+
+d) For that person's liability arising out of the ownership or operation of a
+vehicle while it is being used as a public or livery conveyance (rideshare
+exclusion applies — see Endorsement VC-003 for rideshare coverage options).
+
+e) While operating a vehicle without a valid driver's license.
+
+CLAUSE_ID: PART_A.3
+SECTION: PART A — LIABILITY COVERAGE
+SUBSECTION: 3. Limit of Liability
+
+The limit of liability shown in the Declarations for each person is the maximum
+we will pay for damages for bodily injury, including all derivative claims,
+sustained by any one person in any one accident. The limit of liability for
+each accident is the maximum we will pay for all damages resulting from one
+accident. These limits apply regardless of the number of covered autos, insured
+persons, claims made, vehicles involved, or suits brought.
+
+================================================================================
+PART B — MEDICAL PAYMENTS COVERAGE
+================================================================================
+
+CLAUSE_ID: PART_B.1
+SECTION: PART B — MEDICAL PAYMENTS COVERAGE
+SUBSECTION: 1. Insuring Agreement
+
+We will pay reasonable expenses incurred for necessary medical and funeral
+services because of bodily injury caused by accident and sustained by a covered
+person. We will pay only those expenses incurred for services rendered within
+three years from the date of the accident. The limit of liability for this
+coverage is shown in the Declarations.
+
+CLAUSE_ID: PART_B.2
+SECTION: PART B — MEDICAL PAYMENTS COVERAGE
+SUBSECTION: 2. Exclusions — Medical Payments
+
+We do not provide Medical Payments Coverage for any person for bodily injury:
+
+a) Sustained while occupying any motorized vehicle having fewer than four
+wheels.
+
+b) Sustained while occupying your covered auto when it is being used as a
+public or livery conveyance.
+
+c) Sustained while occupying a vehicle without a reasonable belief of
+entitlement.
+
+================================================================================
+PART C — UNINSURED MOTORISTS COVERAGE
+================================================================================
+
+CLAUSE_ID: PART_C.1
+SECTION: PART C — UNINSURED MOTORISTS COVERAGE
+SUBSECTION: 1. Insuring Agreement
+
+We will pay compensatory damages which a covered person is legally entitled to
+recover from the owner or operator of an uninsured motor vehicle because of
+bodily injury sustained by a covered person and caused by an accident. The
+owner's or operator's liability for these damages must arise out of the
+ownership, maintenance or use of an uninsured motor vehicle.
+
+CLAUSE_ID: PART_C.2
+SECTION: PART C — UNINSURED MOTORISTS COVERAGE
+SUBSECTION: 2. Limit of Liability
+
+Our maximum payment for all damages resulting from any one accident is the
+lesser of: (a) the difference between the amount of damages for bodily injury
+and the amount paid or payable by or on behalf of persons or organizations who
+may be legally responsible for the bodily injury; and (b) the limit of
+liability for this coverage.
+
+================================================================================
+PART D — COVERAGE FOR DAMAGE TO YOUR AUTO
+================================================================================
+
+CLAUSE_ID: PART_D.1
+SECTION: PART D — COVERAGE FOR DAMAGE TO YOUR AUTO
+SUBSECTION: 1. Insuring Agreement
+
+a) Collision Coverage: We will pay for direct and accidental loss to your
+covered auto or any non-owned auto, minus any applicable deductible shown in
+the Declarations, if the loss results from collision.
+
+b) Other Than Collision (Comprehensive) Coverage: We will pay for direct and
+accidental loss to your covered auto or any non-owned auto, minus any
+applicable deductible shown in the Declarations, if the loss does not result
+from collision. Losses covered under Other Than Collision include: theft,
+windstorm, hail, fire, explosion, earthquake, flood, vandalism, falling
+objects, and contact with bird or animal.
+
+c) For a loss caused by collision, the Collision Deductible applies.
+For a loss caused by a peril covered under Other Than Collision, the
+Other Than Collision Deductible applies. Both deductibles are shown in the
+Declarations.
+
+CLAUSE_ID: PART_D.2
+SECTION: PART D — COVERAGE FOR DAMAGE TO YOUR AUTO
+SUBSECTION: 2. Transportation Expenses
+
+In addition to our limit of liability, we will pay up to $30 per day and up to
+a maximum of $900 for transportation expenses incurred by you because of loss
+to a covered auto. Transportation expenses are only payable when the covered
+auto is:
+a) Stolen and not recovered within 48 hours of the theft; or
+b) Damaged in a covered loss and in the shop for repair.
+Payment begins 48 hours after the theft or the date the covered auto is
+delivered to the repair shop, whichever applies.
+
+CLAUSE_ID: PART_D.3
+SECTION: PART D — COVERAGE FOR DAMAGE TO YOUR AUTO
+SUBSECTION: 3. Exclusions — Damage to Your Auto
+
+We will not pay for loss to a covered auto or non-owned auto caused by or
+resulting from any of the following:
+
+a) Wear and tear, freezing, mechanical or electrical breakdown or failure,
+road damage to tires. This exclusion does not apply if the damage results from
+the total theft of your covered auto.
+
+b) Radioactive contamination or the explosion of nuclear weapons.
+
+c) Destruction or confiscation by governmental or civil authorities.
+
+d) Racing — loss while the vehicle is used in any racing contest, speed
+contest, hill-climbing contest, jumping contest, or any similar contest.
+
+e) Electronic equipment not permanently installed in the covered auto,
+including communication devices, data systems, and media players.
+
+f) Awnings, cabanas, or equipment designed to create additional living
+facilities, unless permanently installed.
+
+g) Diminution in value — any reduction in market value of the covered auto
+after it has been repaired.
+
+h) Custom parts or equipment unless described in the Declarations or covered
+by Endorsement VC-004.
+
+i) Loss to a non-owned auto used without a reasonable belief of entitlement.
+
+CLAUSE_ID: PART_D.4
+SECTION: PART D — COVERAGE FOR DAMAGE TO YOUR AUTO
+SUBSECTION: 4. Limit of Liability
+
+a) Our limit of liability for loss is the lesser of:
+   (1) The actual cash value of the stolen or damaged property; or
+   (2) The amount necessary to repair or replace the property with other
+       property of like kind and quality.
+
+b) An adjustment for depreciation and physical condition will be made in
+determining actual cash value in the event of a total loss.
+
+c) If a repair or replacement results in better than like kind or quality,
+we will not pay for the amount of betterment.
+
+d) For total loss (as defined herein), we will pay the actual cash value of
+the covered auto at the time of the loss, minus your applicable deductible.
+We reserve the right to offer a replacement vehicle of like kind and quality
+in lieu of a cash settlement.
+
+e) For partial loss (repairs), we will pay the cost of repair minus your
+applicable deductible, provided that repairs restore the vehicle to its
+pre-loss condition.
+
+CLAUSE_ID: PART_D.5
+SECTION: PART D — COVERAGE FOR DAMAGE TO YOUR AUTO
+SUBSECTION: 5. Payment of Loss — Deductible Application
+
+a) We may pay for loss in money or repair or replace the damaged or stolen
+property. We may, at our expense, return any stolen property to you or pay for
+the loss. If we return stolen property, we will pay for any damage resulting
+from the theft. We may keep all or part of the property at the agreed or
+appraised value.
+
+b) The applicable deductible will be waived if: (i) a clearly identified,
+uninsured motorist is at fault for the collision; and (ii) you report the
+accident to law enforcement within 24 hours.
+
+c) Your deductible applies per occurrence, not per damaged component.
+
+================================================================================
+PART E — DUTIES AFTER AN ACCIDENT OR LOSS
+================================================================================
+
+CLAUSE_ID: PART_E.1
+SECTION: PART E — DUTIES AFTER AN ACCIDENT OR LOSS
+SUBSECTION: 1. General Duties
+
+We must be notified promptly of how, when and where the accident or loss
+happened. Notice should include the names and addresses of any injured persons
+and any witnesses.
+
+A person seeking coverage must:
+a) Cooperate with us in the investigation, settlement or defense of any claim
+or suit.
+
+b) Promptly send us copies of any notices or legal papers received in
+connection with the accident or loss.
+
+c) Submit to physical exams by physicians we select as often as we reasonably
+require.
+
+d) Authorize us to obtain medical reports and other pertinent records.
+
+e) Submit a proof of loss when required by us.
+
+CLAUSE_ID: PART_E.2
+SECTION: PART E — DUTIES AFTER AN ACCIDENT OR LOSS
+SUBSECTION: 2. Additional Duties for Coverage for Damage to Your Auto
+
+A person seeking Coverage for Damage to Your Auto must also:
+a) Take reasonable steps after loss to protect the covered auto from further
+loss. We will pay reasonable expenses incurred to do this.
+
+b) Promptly notify the police if the covered auto is stolen.
+
+c) Permit us to inspect and appraise the damaged property before its repair
+or disposal.
+
+d) Submit to examination under oath as required.
+
+================================================================================
+PART F — GENERAL PROVISIONS
+================================================================================
+
+CLAUSE_ID: PART_F.1
+SECTION: PART F — GENERAL PROVISIONS
+SUBSECTION: 1. Policy Period and Territory
+
+This policy applies only to accidents and losses which occur during the policy
+period as shown in the Declarations, and within the United States of America,
+its territories or possessions, Puerto Rico or Canada.
+
+CLAUSE_ID: PART_F.2
+SECTION: PART F — GENERAL PROVISIONS
+SUBSECTION: 2. Fraud
+
+If any person seeking coverage under this policy has made fraudulent statements
+or engaged in fraudulent conduct in connection with any accident or loss for
+which coverage is sought, coverage is void and we will not pay any such claim.
+We reserve the right to recover any amounts paid on such fraudulent claims.
+Fraudulent indicators include but are not limited to: staged accidents,
+inflated repair estimates, misrepresentation of vehicle condition, and
+submission of false documentation.
+
+CLAUSE_ID: PART_F.3
+SECTION: PART F — GENERAL PROVISIONS
+SUBSECTION: 3. Our Right to Recover Payment
+
+If we make a payment under this policy and the person to or for whom payment
+was made has a right to recover damages from another, we will be subrogated to
+that right. That person shall do everything necessary to secure our rights and
+shall do nothing after loss to prejudice them.
+
+CLAUSE_ID: PART_F.4
+SECTION: PART F — GENERAL PROVISIONS
+SUBSECTION: 4. Changes
+
+This policy contains all the agreements between you and us. Its terms may not
+be changed or waived except by endorsement issued by us. If a change requires
+a premium adjustment, we will adjust the premium as of the effective date of
+change.
+
+CLAUSE_ID: PART_F.5
+SECTION: PART F — GENERAL PROVISIONS
+SUBSECTION: 5. Termination
+
+a) Cancellation: This policy may be cancelled during the policy period as
+follows: (i) You may cancel at any time by returning this policy or by giving
+us advance written notice. (ii) We may cancel by mailing to the Named Insured
+at least 10 days notice of cancellation before cancellation is effective for
+nonpayment of premium, or at least 30 days notice for any other reason.
+
+b) Non-renewal: If we decide not to renew or continue this policy, we will
+mail notice to the Named Insured at least 30 days before the end of the
+policy period.

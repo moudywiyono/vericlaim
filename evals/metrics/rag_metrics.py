@@ -1,6 +1,5 @@
 """
 RAG / Policy Reasoner evaluation metrics.
-Stubs with correct signatures — implementations in Phase 2 (RAG build).
 """
 from __future__ import annotations
 
@@ -20,7 +19,17 @@ def recall_at_k(
     Returns:
         mean Recall@k across all queries
     """
-    raise NotImplementedError
+    if not retrieved_ids:
+        return 0.0
+    total = 0.0
+    for retrieved, relevant in zip(retrieved_ids, relevant_ids):
+        relevant_set = set(relevant)
+        if not relevant_set:
+            total += 1.0
+            continue
+        top_k = set(retrieved[:k])
+        total += len(top_k & relevant_set) / len(relevant_set)
+    return total / len(retrieved_ids)
 
 
 def mean_reciprocal_rank(
@@ -36,7 +45,16 @@ def mean_reciprocal_rank(
     Returns:
         MRR in [0, 1]
     """
-    raise NotImplementedError
+    if not retrieved_ids:
+        return 0.0
+    total = 0.0
+    for retrieved, relevant in zip(retrieved_ids, relevant_ids):
+        relevant_set = set(relevant)
+        for rank, cid in enumerate(retrieved, start=1):
+            if cid in relevant_set:
+                total += 1.0 / rank
+                break
+    return total / len(retrieved_ids)
 
 
 def faithfulness_score(
@@ -45,7 +63,7 @@ def faithfulness_score(
 ) -> float:
     """
     Faithfulness: fraction of claims in each generated answer that are
-    attributable to the retrieved context (RAGAS-style).
+    attributable to the retrieved context (word-overlap approximation).
 
     Args:
         generated_answers: list of generated adjudication texts
@@ -53,7 +71,23 @@ def faithfulness_score(
     Returns:
         mean faithfulness score in [0, 1]
     """
-    raise NotImplementedError
+    if not generated_answers:
+        return 0.0
+    total = 0.0
+    for answer, contexts in zip(generated_answers, retrieved_contexts):
+        if not contexts:
+            continue
+        context_words = set(" ".join(contexts).lower().split())
+        # Split on period to approximate sentence boundaries
+        sentences = [s.strip() for s in answer.split(".") if s.strip()]
+        if not sentences:
+            continue
+        faithful_count = sum(
+            len(set(s.lower().split()) & context_words) / max(len(s.split()), 1) >= 0.4
+            for s in sentences
+        )
+        total += faithful_count / len(sentences)
+    return total / len(generated_answers)
 
 
 def endorsement_attachment_rate(
@@ -71,6 +105,17 @@ def endorsement_attachment_rate(
         retrieved_id_sets: per-query list of retrieved clause IDs
         master_to_endorsements: mapping of master clause ID → [endorsement IDs]
     Returns:
-        attachment rate in [0, 1]
+        attachment rate in [0, 1]; 1.0 if no master clauses have endorsements
     """
-    raise NotImplementedError
+    if not master_to_endorsements:
+        return 1.0
+    total_opportunities = 0
+    attached = 0
+    for retrieved in retrieved_id_sets:
+        retrieved_set = set(retrieved)
+        for master_id, endorsement_ids in master_to_endorsements.items():
+            if master_id in retrieved_set and endorsement_ids:
+                total_opportunities += 1
+                if all(eid in retrieved_set for eid in endorsement_ids):
+                    attached += 1
+    return attached / max(total_opportunities, 1)

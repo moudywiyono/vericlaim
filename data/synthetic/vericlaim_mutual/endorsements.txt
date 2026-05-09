@@ -1,0 +1,113 @@
+VERICLAIM MUTUAL INSURANCE COMPANY
+POLICY ENDORSEMENTS
+Form VC-ENDORSE-2024
+
+These endorsements modify insurance provided under:
+AUTOMOBILE INSURANCE POLICY — Form VC-AUTO-2024
+
+================================================================================
+ENDORSEMENT VC-001 — RENTAL REIMBURSEMENT COVERAGE
+================================================================================
+
+CLAUSE_ID: ENDORSEMENT_VC001.1
+ENDORSEMENT: VC-001
+MODIFIES: PART_D.2
+SUBSECTION: Coverage Grant
+
+With respect to a covered auto for which this endorsement applies, we will pay
+reasonable rental charges you incur because your covered auto is not driveable
+or is being repaired as a result of a covered loss. Coverage begins on the
+date of the covered loss. We will pay up to $50 per day, up to a maximum of
+$1,500 per loss occurrence.
+
+CLAUSE_ID: ENDORSEMENT_VC001.2
+ENDORSEMENT: VC-001
+MODIFIES: PART_D.2
+SUBSECTION: Conditions
+
+Rental reimbursement does not apply to theft of the covered auto unless the
+vehicle is not recovered within 48 hours. Coverage terminates on the earliest
+of: (a) the date repair of the covered auto is completed; (b) the date we
+offer settlement for a total loss; or (c) the date coverage limits are
+exhausted.
+
+================================================================================
+ENDORSEMENT VC-002 — LOAN/LEASE GAP COVERAGE
+================================================================================
+
+CLAUSE_ID: ENDORSEMENT_VC002.1
+ENDORSEMENT: VC-002
+MODIFIES: PART_D.4
+SUBSECTION: Coverage Grant
+
+In the event of a total loss to a covered auto, we will pay, in addition to
+the actual cash value payment under PART D, the difference between:
+a) The actual cash value of the covered auto at the time of the loss; and
+b) The outstanding balance of the loan or lease on the covered auto at the
+time of the loss.
+
+The maximum additional payment under this endorsement is limited to 25% of
+the actual cash value of the covered auto.
+
+CLAUSE_ID: ENDORSEMENT_VC002.2
+ENDORSEMENT: VC-002
+MODIFIES: PART_D.4
+SUBSECTION: Exclusions
+
+Gap coverage does not apply to: (a) amounts past due or deferred at the time
+of the loss; (b) lease charges such as security deposits, overdue payments,
+or financial penalties; (c) carry-over balances from previous loans or leases;
+or (d) any amount rolled into the current loan from a prior transaction.
+
+================================================================================
+ENDORSEMENT VC-003 — RIDESHARE COVERAGE EXTENSION
+================================================================================
+
+CLAUSE_ID: ENDORSEMENT_VC003.1
+ENDORSEMENT: VC-003
+MODIFIES: PART_A.2.d
+SUBSECTION: Coverage Extension
+
+Notwithstanding the livery/rideshare exclusion in PART A, Section 2(d), we
+will provide liability coverage during Period 1 of rideshare activity
+(app on, waiting for a match) for covered autos used in connection with a
+Transportation Network Company (TNC). Coverage during Period 2 (match
+accepted) and Period 3 (passenger in vehicle) is the responsibility of the
+TNC's commercial policy, and this endorsement does not extend coverage to
+those periods unless specifically stated in the Declarations.
+
+CLAUSE_ID: ENDORSEMENT_VC003.2
+ENDORSEMENT: VC-003
+MODIFIES: PART_D.1
+SUBSECTION: Physical Damage Extension
+
+Physical damage coverage (PART D) extends to covered losses occurring during
+Period 1 of rideshare activity. A $500 rideshare deductible applies in lieu
+of the standard deductible for losses occurring during Period 1. Coverage does
+not extend to Periods 2 or 3.
+
+================================================================================
+ENDORSEMENT VC-004 — CUSTOM PARTS AND EQUIPMENT
+================================================================================
+
+CLAUSE_ID: ENDORSEMENT_VC004.1
+ENDORSEMENT: VC-004
+MODIFIES: PART_D.3.h
+SUBSECTION: Coverage Grant
+
+Notwithstanding the exclusion in PART D, Section 3(h), we will pay for loss
+to custom parts or equipment installed in or upon the covered auto, up to the
+limit shown in the Declarations for this endorsement (maximum $5,000). Custom
+parts and equipment means equipment, devices, accessories, enhancements, and
+changes, other than those which are original manufacturer equipment, that
+alter the appearance or performance of a vehicle.
+
+CLAUSE_ID: ENDORSEMENT_VC004.2
+ENDORSEMENT: VC-004
+MODIFIES: PART_D.3.h
+SUBSECTION: Conditions
+
+Coverage under this endorsement applies only to custom parts and equipment
+that are permanently installed and specifically described in the schedule
+attached to this endorsement. Aftermarket audio equipment is covered only if
+permanently installed in the dashboard or factory location.

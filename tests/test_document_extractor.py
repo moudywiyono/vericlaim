@@ -128,7 +128,8 @@ async def test_finding_has_correct_page_and_bbox(packet: ClaimPacket):
     assert f.bbox == (0.0, 0.0, 1.0, 1.0)  # full-page placeholder
 
 
-async def test_does_not_overwrite_existing_findings(tmp_path: Path, pdf_path: Path):
+async def test_returns_only_new_findings(tmp_path: Path, pdf_path: Path):
+    # Nodes return only their new findings; the orchestrator owns accumulation.
     from orchestration.state import DocumentFinding
     node = DocumentExtractorNode()
     pre = DocumentFinding(
@@ -144,9 +145,9 @@ async def test_does_not_overwrite_existing_findings(tmp_path: Path, pdf_path: Pa
     ):
         result = await node.run(store, packet)
 
-    assert len(result.store.document_findings) == 2
-    names = [f.field_name for f in result.store.document_findings]
-    assert "prior_field" in names
+    # result store contains only the 1 new finding, not the pre-existing one
+    assert len(result.store.document_findings) == 1
+    assert result.store.document_findings[0].field_name != "prior_field"
 
 
 # ---------------------------------------------------------------------------

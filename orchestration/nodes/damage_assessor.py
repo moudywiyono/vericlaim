@@ -202,7 +202,8 @@ class DamageAssessorNode(Node):
         else:
             status = AgentStatus.SUCCESS
 
-        updated_store = store.mark_agent(self.name, status).model_copy(
-            update={"damage_findings": store.damage_findings + all_findings}
+        return NodeResult(
+            store=self._delta(store, status, damage_findings=all_findings),
+            status=status,
+            cost_usd=total_cost,
         )
-        return NodeResult(store=updated_store, status=status, cost_usd=total_cost)

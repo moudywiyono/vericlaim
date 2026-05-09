@@ -131,7 +131,8 @@ async def test_multiple_regions_in_one_image(packet: ClaimPacket):
     assert len(result.store.damage_findings) == 2
 
 
-async def test_does_not_overwrite_existing_findings(tmp_path: Path, image_path: Path):
+async def test_returns_only_new_findings(tmp_path: Path, image_path: Path):
+    # Nodes return only their new findings; the orchestrator owns accumulation.
     from orchestration.state import DamageFinding
     node = DamageAssessorNode()
     pre_existing = DamageFinding(
@@ -148,9 +149,9 @@ async def test_does_not_overwrite_existing_findings(tmp_path: Path, image_path: 
     with patch("litellm.acompletion", new_callable=AsyncMock, return_value=_vlm_response([_region()])):
         result = await node.run(store, packet)
 
-    assert len(result.store.damage_findings) == 2
-    ids = [f.region_id for f in result.store.damage_findings]
-    assert "pre_existing" in ids
+    # result store contains only the 1 new finding, not the pre-existing one
+    assert len(result.store.damage_findings) == 1
+    assert result.store.damage_findings[0].region_id != "pre_existing"
 
 
 # ---------------------------------------------------------------------------
