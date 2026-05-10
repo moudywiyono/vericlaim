@@ -21,6 +21,11 @@ dependencies = [
     "sqlmodel>=0.0.18",
     "pillow>=10.0",
     "pypdf>=4.0",
+    "fastapi>=0.104",
+    "uvicorn[standard]>=0.24",
+    "python-multipart>=0.0.6",
+    "pydantic-settings>=2.0",
+    "supabase>=2.0",
 ]
 
 [project.optional-dependencies]

@@ -19,6 +19,8 @@ class ClaimState(str, Enum):
     ADJUDICATING = "adjudicating"
     DRAFTING = "drafting"
     COMPLETE = "complete"
+    APPROVED = "approved"
+    DENIED = "denied"
     FAILED = "failed"
     HUMAN_REVIEW = "human_review"
 
@@ -126,6 +128,8 @@ class EvidenceStore(BaseModel):
     fraud_signals: list[FraudSignal] = Field(default_factory=list)
     consistency_flags: list[ConsistencyFlag] = Field(default_factory=list)
     specialist_status: dict[str, AgentStatus] = Field(default_factory=dict)
+    claimant_letter: str = ""
+    officer_note: str = ""
 
     def mark_agent(self, agent_name: str, status: AgentStatus) -> "EvidenceStore":
         updated = dict(self.specialist_status)
