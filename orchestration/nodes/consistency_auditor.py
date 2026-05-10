@@ -44,15 +44,19 @@ STATEMENT FINDINGS:
 {statement_summary}
 
 Check for:
-- date_mismatch: inconsistencies in dates across documents, statements, loss reports
-- damage_narrative_conflict: physical damage inconsistent with the claimant's narrative
-- estimate_conflict: repair estimates that don't match damage severity category
-- coverage_gap: damage categories that may not align with stated coverage type
-- document_inconsistency: conflicting field values across different documents
+- date_mismatch: genuine date conflicts between documents or between a document and an explicitly stated incident date.
+  IMPORTANT date_mismatch rules:
+  · Repair estimates, invoices, and damage assessments are routinely dated DAYS TO MONTHS after the incident — this is normal processing time and must NOT be flagged.
+  · Only flag when a document is definitively dated BEFORE the stated incident date (e.g., a repair invoice issued before the incident happened is suspicious; a repair invoice issued after is expected).
+  · When the claim form lists no explicit incident date, do NOT infer the incident date from a date mentioned in a recorded statement or audio transcript — that reference may be approximate or contextual. Only flag if at least two independent documents provide conflicting explicit dates for the same event.
+- damage_narrative_conflict: physical damage findings directly contradict the claimant's description of the incident mechanism (not a date issue — a physical inconsistency).
+- estimate_conflict: repair cost estimates that are grossly disproportionate to the assessed damage severity category (e.g., a minor cosmetic scratch with a $15,000 estimate).
+- coverage_gap: damage categories that clearly fall outside the policy coverage type claimed.
+- document_inconsistency: conflicting field values for the same fact across different documents (e.g., two documents show different VIN numbers, different policy holder names).
 
 For each conflict found:
 - flag_type: one of the categories above
-- description: specifically what conflicts
+- description: specifically what conflicts and why it is an inconsistency
 - severity: "minor" (informational), "major" (needs explanation), "critical" (blocks adjudication)
 - involved_findings: list of field_names, region_ids, or claim excerpts involved
 

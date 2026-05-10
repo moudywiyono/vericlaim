@@ -3,5 +3,8 @@
   "claim_type": "auto",
   "form_data": {
     "description": "rear-end collision at red light, front bumper crumpled, airbags did not deploy, estimated repair $3,200"
-  }
+  },
+  "images": ["damage-car.png"],
+  "audio": ["vehicle-insurance-claim.mp4"],
+  "pdfs": ["repair_estimate.pdf"]
 }

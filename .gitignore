@@ -14,8 +14,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -219,8 +219,23 @@ __marimo__/
 
 # VeriClaim runtime artifacts
 traces/
+uploads/
 vericlaim.db
 *.db
 
 # Claude Code operational context
 CLAUDE.md
+
+# Sample data
+vehicle-insurance-claim.mp4
+
+# macOS
+.DS_Store
+frontend-claimant/.next/
+frontend-claimant/node_modules/
+frontend-claimant/.env.local
+frontend-officer/.next/
+frontend-officer/node_modules/
+frontend-officer/.env.local
+frontend/
+sample-claims/

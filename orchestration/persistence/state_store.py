@@ -1,123 +1,103 @@
 """
-SQLite-backed claim state store.
+Supabase-backed claim state store.
 
-Persists ClaimRecord rows with full transition history.
-Each upsert appends a transition row; the current state is always the latest.
-Migration path to Postgres: swap sqlite3 for psycopg2 + adjust DDL.
+One row per claim in the `claim_states` table — state is overwritten on each
+transition. Uses the Supabase REST client (service_role key) so no direct
+Postgres password is needed.
 """
 from __future__ import annotations
 
 import os
-import sqlite3
 from datetime import datetime, timezone
-from pathlib import Path
+
+from supabase import create_client, Client
 
 from orchestration.state import ClaimRecord, ClaimState
 
-_DB_PATH = os.getenv("VERICLAIM_DB_PATH", "vericlaim.db")
+_TABLE = "claim_states"
 
-_DDL = """
-CREATE TABLE IF NOT EXISTS claim_state (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    claim_id TEXT NOT NULL,
-    state TEXT NOT NULL,
-    claim_type TEXT,
-    routing_confidence REAL,
-    error_message TEXT,
-    created_at TEXT NOT NULL,
-    updated_at TEXT NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_claim_state_claim_id ON claim_state(claim_id);
-CREATE INDEX IF NOT EXISTS idx_claim_state_state ON claim_state(state);
-"""
+
+def _client() -> Client:
+    url = os.getenv("SUPABASE_URL", "")
+    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+    if not url or not key:
+        raise RuntimeError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env")
+    return create_client(url, key)
 
 
 class ClaimStateStore:
-    def __init__(self, db_path: str | Path | None = None) -> None:
-        self._db_path = str(db_path or _DB_PATH)
-        self._init_db()
-
-    def _conn(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self._db_path)
-        conn.row_factory = sqlite3.Row
-        return conn
-
-    def _init_db(self) -> None:
-        with self._conn() as conn:
-            conn.executescript(_DDL)
+    def __init__(self) -> None:
+        self._db = _client()
 
     def upsert(self, record: ClaimRecord) -> None:
-        """Insert a new row for every state transition (full history)."""
-        with self._conn() as conn:
-            conn.execute(
-                """
-                INSERT INTO claim_state
-                    (claim_id, state, claim_type, routing_confidence,
-                     error_message, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    record.claim_id,
-                    record.state.value,
-                    record.claim_type,
-                    record.routing_confidence,
-                    record.error_message,
-                    record.created_at.isoformat(),
-                    record.updated_at.isoformat(),
-                ),
-            )
+        """Insert or update the current state for a claim."""
+        self._db.table(_TABLE).upsert({
+            "claim_id":   record.claim_id,
+            "state":      record.state.value,
+            "claim_type": record.claim_type,
+            "confidence": record.routing_confidence,
+            "specialist_status": {},
+            "updated_at": record.updated_at.isoformat(),
+        }).execute()
 
     def get_current(self, claim_id: str) -> ClaimRecord | None:
-        """Return the most recent state row for a claim."""
-        with self._conn() as conn:
-            row = conn.execute(
-                """
-                SELECT * FROM claim_state
-                WHERE claim_id = ?
-                ORDER BY id DESC
-                LIMIT 1
-                """,
-                (claim_id,),
-            ).fetchone()
-        if row is None:
+        """Return the current state row for a claim."""
+        res = (
+            self._db.table(_TABLE)
+            .select("*")
+            .eq("claim_id", claim_id)
+            .limit(1)
+            .execute()
+        )
+        if not res or not res.data:
             return None
+        row = res.data[0]
         return ClaimRecord(
             claim_id=row["claim_id"],
             state=ClaimState(row["state"]),
             claim_type=row["claim_type"],
-            routing_confidence=row["routing_confidence"],
-            error_message=row["error_message"],
+            routing_confidence=row["confidence"],
+            error_message=None,
             created_at=datetime.fromisoformat(row["created_at"]),
             updated_at=datetime.fromisoformat(row["updated_at"]),
         )
 
     def list_by_state(self, state: ClaimState) -> list[str]:
-        """Return claim_ids currently in the given state (useful for crash recovery)."""
-        with self._conn() as conn:
-            rows = conn.execute(
-                """
-                SELECT DISTINCT claim_id FROM claim_state cs1
-                WHERE state = ?
-                  AND id = (
-                      SELECT MAX(id) FROM claim_state cs2
-                      WHERE cs2.claim_id = cs1.claim_id
-                  )
-                """,
-                (state.value,),
-            ).fetchall()
-        return [r["claim_id"] for r in rows]
+        """Return all claim_ids currently in the given state."""
+        res = (
+            self._db.table(_TABLE)
+            .select("claim_id")
+            .eq("state", state.value)
+            .execute()
+        )
+        return [r["claim_id"] for r in (res.data or [])]
+
+    def list_by_states(self, states: list[ClaimState]) -> list[ClaimRecord]:
+        """Return all ClaimRecords currently in any of the given states."""
+        values = [s.value for s in states]
+        res = (
+            self._db.table(_TABLE)
+            .select("*")
+            .in_("state", values)
+            .execute()
+        )
+        records = []
+        for row in (res.data if res and res.data else []):
+            records.append(ClaimRecord(
+                claim_id=row["claim_id"],
+                state=ClaimState(row["state"]),
+                claim_type=row["claim_type"],
+                routing_confidence=row["confidence"],
+                error_message=None,
+                created_at=datetime.fromisoformat(row["created_at"]),
+                updated_at=datetime.fromisoformat(row["updated_at"]),
+            ))
+        return records
 
     def count_by_state(self) -> dict[str, int]:
-        """Counts per current state — for ops dashboards."""
-        with self._conn() as conn:
-            rows = conn.execute(
-                """
-                SELECT state, COUNT(*) as cnt FROM claim_state cs1
-                WHERE id = (
-                    SELECT MAX(id) FROM claim_state cs2
-                    WHERE cs2.claim_id = cs1.claim_id
-                )
-                GROUP BY state
-                """
-            ).fetchall()
-        return {r["state"]: r["cnt"] for r in rows}
+        """Count of claims per state — for ops dashboards."""
+        res = self._db.table(_TABLE).select("state").execute()
+        counts: dict[str, int] = {}
+        for row in (res.data or []):
+            counts[row["state"]] = counts.get(row["state"], 0) + 1
+        return counts

@@ -2,7 +2,7 @@
 
 A multi-modal insurance claims triage and adjudication system built to demonstrate production-grade AI engineering patterns: specialist agent orchestration, hybrid RAG with citation enforcement, a synthetic perturbation eval harness, and end-to-end LLMOps instrumentation.
 
-> **Research prototype** — fictional carrier "VeriClaim Mutual". Not deployable software.
+> **Research prototype** — fictional carrier "VeriClaim Mutual". Not production software.
 
 ---
 
@@ -13,20 +13,22 @@ An insurance claim arrives as a mix of vehicle damage photos, scanned PDFs (poli
 ```
 Intake & Router
      │
-     ├── Damage Assessor      (YOLO-World + SAM + VLM)
-     ├── Document Extractor   (DocVQA)
-     └── Statement Analyst    (Whisper + audio classifier + LLM)
+     ├── Damage Assessor      (VLM)
+     ├── Document Extractor   (pypdf + LLM)
+     └── Statement Analyst    (LLM)
                 │
           EvidenceStore  ◄── typed schema boundary
                 │
      ├── Policy Reasoner      (hybrid RAG + citation enforcement)
-     ├── Fraud Aggregator     (gradient-boosted tabular + LLM soft signals)
+     ├── Fraud Aggregator     (LLM soft signals)
      └── Consistency Auditor  (LLM)
                 │
           Adjudicator          ◄── blind to raw evidence
                 │
           Output Drafter
 ```
+
+Fully automated claims go straight to a decision. Ambiguous or high-risk claims are escalated to a human officer via a dedicated review portal.
 
 ---
 
@@ -62,27 +64,34 @@ Most "multi-modal AI" projects pass an image to a frontier model and call it don
 |---|---|---|
 | 1 — Foundation | Orchestration scaffold, EvidenceStore schema, ingestion & routing, eval harness skeleton | ✅ Complete |
 | 2 — Damage Assessor + Document Extractor | First vertical slice end-to-end with component evals | ✅ Complete |
-| 3 — Policy Reasoner (RAG) + Statement Analyst + Fraud Aggregator | Full agent graph wired into Adjudicator | 🔜 Next |
-| 4 — E2E eval, adversarial testing, LLMOps dashboards | Full evaluation suite, cost optimisation | Planned |
-| 5 — Demo UI + writeup | Streamlit or Next.js, recorded walkthrough | Planned |
-
-**Phase 1 test coverage:** 156 tests across state immutability, DAG topology, retry/circuit-breaker state machines, SQLite persistence, JSONL tracing, and eval harness contracts.
+| 3 — Reasoning layer | Policy Reasoner (RAG), Statement Analyst, Fraud Aggregator, Consistency Auditor, Adjudicator, Output Drafter | ✅ Complete |
+| 4 — LLMOps | Langfuse tracing, PromptRegistry, cost/latency dashboards | ✅ Complete |
+| 5 — Full-stack UI | FastAPI backend, claimant portal (port 3000), officer portal (port 3001) | ✅ Complete |
 
 ---
 
 ## Stack
 
+**Backend**
 - **Python 3.13**, Pydantic v2, asyncio
+- **FastAPI** — REST API, async claim pipeline runner, file serving
 - **LiteLLM** — provider-agnostic LLM calls (swap backend without touching agent code)
 - **HuggingFace Transformers** — `facebook/bart-large-mnli` for zero-shot claim routing
 - **bge-large-en-v1.5** + **rank_bm25** + **bge-reranker-v2-m3** — RAG retrieval pipeline
-- **SQLite** (→ Postgres migration path documented) — claim state machine persistence
+- **Supabase** — claim state machine persistence
 - **Langfuse** (self-hosted) — trace store, prompt versioning, LLMOps dashboards
 - **pytest** + **pytest-asyncio** — test harness
+
+**Frontend**
+- **Next.js 15** (App Router), TypeScript, Tailwind CSS v4
+- Claimant portal (port 3000) — claim submission, real-time status polling, outcome display
+- Officer portal (port 3001) — review queue, two-column evidence review, decision panel
 
 ---
 
 ## Quickstart
+
+### 1. Python environment
 
 ```bash
 git clone https://github.com/moudywiyono/vericlaim.git
@@ -92,21 +101,58 @@ python3.13 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
 cp .env.example .env
-# Add ANTHROPIC_API_KEY or OPENAI_API_KEY to .env
-
-pytest tests/
+# Fill in ANTHROPIC_API_KEY and SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
 ```
 
-To run the stub pipeline end-to-end:
+### 2. Build the RAG index
+
+The policy reasoner requires a pre-built index from the corpus before the backend will serve claims.
 
 ```bash
-# Create a minimal claim directory
-mkdir -p data/sample_claim
-echo '{"claim_id":"demo-001","claim_type":"auto","images":[],"pdfs":[],"audio":[],"form_data":{"description":"Minor rear-end collision at low speed."}}' \
-  > data/sample_claim/manifest.json
-
-python -m orchestration.orchestrator --manifest-dir data/sample_claim
+source .venv/bin/activate
+python -m rag.indexing.build --corpus-dir data/synthetic/vericlaim_mutual
 ```
+
+This downloads the embedding and reranker models on first run (~1.5 GB). Subsequent starts are instant.
+
+### 3. Run tests
+
+```bash
+pytest tests/ -v
+```
+
+### 4. Start the backend
+
+```bash
+source .venv/bin/activate
+uvicorn backend.main:app --reload --port 8000
+```
+
+### 5. Start the frontends
+
+```bash
+# Claimant portal — http://localhost:3000
+cd frontend-claimant && npm install && npm run dev
+
+# Officer portal — http://localhost:3001 (new terminal)
+cd frontend-officer && npm install && npm run dev
+```
+
+---
+
+## Environment variables
+
+See `.env.example` for the full list. Required to run the full stack:
+
+| Variable | Where to get it |
+|---|---|
+| `ANTHROPIC_API_KEY` | console.anthropic.com |
+| `SUPABASE_URL` | Supabase project settings |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase project settings → API |
+| `NEXT_PUBLIC_API_URL` | Set in `frontend-claimant/.env.local` and `frontend-officer/.env.local` (defaults to `http://localhost:8000`) |
+| `CORS_ORIGINS` | Comma-separated frontend URLs (defaults to `http://localhost:3000,http://localhost:3001`) |
+
+Langfuse tracing is optional — leave `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` blank to disable.
 
 ---
 

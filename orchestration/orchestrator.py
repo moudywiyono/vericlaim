@@ -213,6 +213,7 @@ async def run_claim(manifest_dir: Path | str) -> EvidenceStore:
                 "policy_findings": store.policy_findings + result_store.policy_findings,
                 "fraud_signals": store.fraud_signals + result_store.fraud_signals,
                 "consistency_flags": store.consistency_flags + result_store.consistency_flags,
+                "claimant_letter": result_store.claimant_letter or store.claimant_letter,
             })
 
     # --- Completion ---

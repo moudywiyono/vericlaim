@@ -31,8 +31,8 @@ logger = logging.getLogger(__name__)
 _MODEL = os.getenv("VERICLAIM_DEFAULT_MODEL", "claude-sonnet-4-6")
 
 _DRAFT_PROMPT = """\
-You are a professional claims adjuster at VeriClaim Mutual Insurance Company.
-Write a formal settlement letter to the claimant based on the adjudication summary below.
+You are a claims adjuster at VeriClaim Mutual Insurance Company.
+Write a brief decision notice to the claimant. Maximum 4 sentences.
 
 CLAIM ID: {claim_id}
 OVERALL DETERMINATION: {overall_determination}
@@ -45,17 +45,12 @@ ITEMIZED POLICY DETERMINATIONS:
 DAMAGE SUMMARY:
 {damage_summary}
 
-Write a letter that:
-1. States the overall determination clearly in the opening paragraph
-2. Itemizes each coverage determination with the relevant policy clause number
-3. Explains any denials or exclusions in plain language the claimant can understand
-4. States next steps (payment timeline if covered, appeal rights and 30-day deadline if denied)
-5. Includes this exact regulatory notice at the end:
-   "This determination is made pursuant to the terms and conditions of your policy.
-   You have the right to appeal this decision within 30 days of this letter."
-6. If human review is required, explain that an adjuster will contact them within 5 business days
-
-Keep the tone professional but empathetic. Write the full letter text only."""
+Rules:
+- Sentence 1: State the outcome clearly (approved / denied / partial / under review).
+- Sentence 2: Give the single most important reason (policy clause or damage finding).
+- Sentence 3: State the next step (payment timeline, or appeal deadline, or officer contact).
+- Sentence 4 (only if denied): "You may appeal within 30 days by contacting our support team."
+- Plain English only. No salutations, no sign-offs, no letterhead. Write the notice text only."""
 
 
 def _derive_overall_determination(
@@ -151,8 +146,10 @@ class OutputDrafterNode(Node):
             )
 
         status = AgentStatus.SUCCESS if letter_text else AgentStatus.PARTIAL
+        delta = self._delta(store, status)
+        delta = delta.model_copy(update={"claimant_letter": letter_text})
         return NodeResult(
-            store=self._delta(store, status),
+            store=delta,
             status=status,
             cost_usd=cost_usd,
             metadata={
